@@ -1,8 +1,22 @@
 import wollok.game.*
-import pepita.*
+import mira.*
+import extras.*
 
 program juego {
 	game.title("Juego Base")
-	game.addVisual(pepita)
+	game.height(10)
+	game.width(10)
+	game.boardGround("paisaje.jpg")
+	
+	game.addVisual(mira)
+	
+	keyboard.left().onPressDo({ mira.mover(izquierda) })
+	keyboard.right().onPressDo({ mira.mover(derecha) })
+	keyboard.up().onPressDo({ mira.mover(arriba) })
+	keyboard.down().onPressDo({ mira.mover(abajo) })
+	keyboard.e().onPressDo({ mira.disparar() })
+	game.onTick(3000, "generadorPatos", {gestorPatos.generarPatos()})
+	game.onTick(1000, "movedorPatos", {gestorPatos.moverPatos()})
+	
 	game.start()
 }
