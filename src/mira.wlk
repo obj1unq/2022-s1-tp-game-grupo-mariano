@@ -1,4 +1,6 @@
 import wollok.game.*
+import balasYCargador.*
+import extras.*
 
 object mira {
 
@@ -7,29 +9,61 @@ object mira {
 	method image() = "mira2.png"
 	
 	method mover(direccion) {
-		position = direccion.siguiente(self.position()) 
+		return if (self.puedeMover(direccion, position)){
+				position = direccion.siguiente(self.position())
+			}
+			else {}
+	}
+	
+	method puedeMover(direccion, posicion){
+		return not direccion.esBorde(posicion)
 	}
 	
 	method disparar(){
-		game.removeVisual(game.uniqueCollider(self))
+		if (balas.hayBalas()){
+		game.sound("disparo.mp3").play()
+		balas.restarUnaBala()
+		self.removerSiHayObjetivo()
+		}
+		else {game.sound("noMasBalas.mp3").play()}
 	}
-
+	
+	method removerSiHayObjetivo(){
+		return if (game.colliders(self).size() == 1){
+			game.removeVisual(game.uniqueCollider(self))
+		} else {}
+	}
 }
 
-object derecha {
+/*	method siguiente(posicion) {
+		return if (not self.esBorde(posicion)){
+		posicion.right(1)
+		}
+		else {posicion}
+	}
+	method esBorde(posicion){
+		return posicion.x() == game.width() - 1
+	}*/
+
+object derecha{
 
 	method siguiente(posicion) {
 		return posicion.right(1)
+		}
+	method esBorde(posicion){
+		return posicion.x() == game.width() - 1
 	}
-
 }
 
 object izquierda {
-
-	method siguiente(posicion) {
+	
+	method siguiente(posicion){
 		return posicion.left(1)
+		}
+		
+	method esBorde(posicion){
+		return posicion.x() == 0
 	}
-
 }
 
 object arriba {
@@ -37,7 +71,10 @@ object arriba {
 	method siguiente(posicion) {
 		return posicion.up(1)
 	}
-
+	
+	method esBorde(posicion){
+		return posicion.y() == game.height() - 1
+	}
 }
 
 object abajo {
@@ -45,5 +82,8 @@ object abajo {
 	method siguiente(posicion) {
 		return posicion.down(1)
 	}
-
+	
+	method esBorde(posicion){
+		return posicion.y() == 0
+	}
 }

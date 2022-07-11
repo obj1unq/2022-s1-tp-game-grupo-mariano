@@ -1,16 +1,17 @@
 import wollok.game.*
 import mira.*
+import balasYCargador.*
 
 class Pato {
 	var property position = game.at(5,5)
 	const lado = self.deQueLado()
 	
-	method image() = "ave.png"
+	method image() = "ave_" + lado.toString() + ".png"
 	
 	method mover(){
 		if (game.hasVisual(self)){
 			self.position(lado.siguiente(self.position()))
-		} else gestorPatos.eliminar(self)
+		} else gestorPatos.eliminar(position)
 	}
 	
 	method deQueLado() {
@@ -36,18 +37,20 @@ object gestorPatos {
 		patitos.forEach({ patito => patito.mover()})
 	}
 	
-	method eliminar(patito) {
-		patitos.remove(patito)
-		game.removeVisual(patito)
+	method eliminar(posicion) {
+		patitos.filter({patito=> patito.position() != posicion})
 	}
+
 }
+
+
 
 object randomizer {
 		
 	method position() {
 		return 	game.at( 
 					[0, game.width() - 1 ].anyOne(),
-					(5..  game.height() - 1).anyOne()
+					(8..  game.height() - 1).anyOne()
 		) 
 	}
 	
