@@ -3,126 +3,122 @@ import mira.*
 import balasYCargador.*
 import gestoresComportamiento.*
 
-
 // --------------------------------- SUPERCLASE OBJETOS EXTRAS ------------------------------------ //
+class Objetivo {
 
-class Objetivo{
-	var property position = game.at(5,5)
-	const property lado = self.deQueLado()
-	
-	method image() = null
-	
-	method puntos() = null
-	
-	method mover(){
-		lado.siguiente(self.position())// <--- AGREGADO SOLAMENTE PARA QUE NO MOLESTE WOLLOK CON LA CONSTANTE LADO
-	}
-	
+	var property position
+	const lado = self.deQueLado()
+
 	method deQueLado() {
-		return if (self.position().x() == 0){
-		 	derecha
-		 } else izquierda
+		return if (self.position().x() == 0) {
+			derecha
+		} else izquierda
 	}
-	
-	method soyVisible(animal){
-		return not animal.lado().fueraDelMapa(animal.position())
+
+	method mover() {
+		if (game.hasVisual(self)) {
+			position = lado.siguiente(position)
+		} else {
+			self.salirDelJuego(position)
+		}
 	}
+
+	method salirDelJuego(posicion)
+
 }
 
 // ------------------------------------ CLASES ANIMALES Y CAZADORES ---------------------------------------- //
 // PATOS-----------
 class Pato inherits Objetivo {
-	
-	override method puntos() = 15
-	
-	override method image() = "ave_" + lado.toString() + ".png"
-	
-	override method mover(){
-		if (game.hasVisual(self) and self.soyVisible(self)){
-			self.position(lado.siguiente(self.position()))
-		}
-		else {gestorPatos.eliminar(position)}
+
+	var property puntos = 5
+
+	method image() = lado.imagenDePato()
+
+	override method salirDelJuego(posicion) {
+		gestorPatos.eliminar(posicion)
 	}
+
 }
 
 // CIERVOS-----------
- class Ciervo inherits Objetivo {
-	
-	override method puntos() = 50
+class Ciervo inherits Objetivo {
 
-	override method image() = "ciervo_" + lado.toString() + ".png"
-	
-	override method mover(){
-		if (game.hasVisual(self)){
-			self.position(lado.siguiente(self.position()))
-		} else gestorCiervos.eliminar(position)
+	var property puntos = 50
+
+	method image() = lado.imagenDeCiervo()
+
+	override method salirDelJuego(posicion) {
+		gestorCiervos.eliminar(posicion)
 	}
-	
+
 	override method deQueLado() {
-		return [derecha, izquierda].anyOne()
+		return [ derecha, izquierda ].anyOne()
 	}
+
 }
 
 // TOPOS-----------
 class Topo inherits Objetivo {
-	
-	override method puntos() = 5
-	
-	override method image() = "topo.png"
-	
-	override method mover(){
-		if (game.hasVisual(self)){
+
+	var property puntos = 5
+
+	method image() = "topo.png"
+
+	override method mover() {
+		if (game.hasVisual(self)) {
 			game.removeVisual(self)
-		} else {}
+		} else {
+		}
 	}
+
+	override method salirDelJuego(posicion) {
+		gestorTopos.eliminar(posicion)
+	}
+
 }
 
 // --------------------------------- RANDOMIZADORES DE TIEMPO Y POSICIONES ------------------------------------ //
-
 // TIEMPO-----------
-object randomTiempo{
-	
-	method generar(){
-		return (15000.. 35000).anyOne()
+object randomTiempo {
+
+	method generar() {
+		return (2000.2100 .. 3000).anyOne()
 	}
+
 }
 
 // POSICIONES GENERAL-----------
-class Random{
-	
-	method position(){
-		return game.at(0,0)
-	}
-	
+class Random {
+
+	method position()
+
 	method emptyPosition() {
 		const position = self.position()
-		if(game.getObjectsIn(position).isEmpty()) {
-			return position	
-		}
-		else {
+		if (game.getObjectsIn(position).isEmpty()) {
+			return position
+		} else {
 			return self.emptyPosition()
 		}
 	}
+
 }
 
 // POSICIONES CIELO-----------
 object randomizerPatos inherits Random {
-		
+
 	override method position() {
-		return 	game.at( 
-					[0, game.width() - 1 ].anyOne(),
-					(8..  game.height() - 1).anyOne()
-		) 
+		return game.at([ 0, game.width() - 1 ].anyOne(), (8 .. game.height() - 1).anyOne())
 	}
+
 }
 
 // POSICIONES TIERRA-----------
 object randomizerTerrestres inherits Random {
-		
+
 	override method position() {
-		return 	game.at( 
-					(0.. game.width() - 1).anyOne(),
-					(1.. 4).anyOne()
-		) 
+		return game.at((0 .. game.width() - 1).anyOne(), (1 .. 4).anyOne())
 	}
+
 }
+

@@ -8,67 +8,78 @@ object mira {
 	var property position = game.center()
 
 	method image() = "mira2.png"
-	
+
 	method mover(direccion) {
-		return if (self.puedeMover(direccion, position)){
-				position = direccion.siguiente(self.position())
-			}
-			else {}
+		return if (self.puedeMover(direccion, position)) {
+			position = direccion.siguiente(self.position())
+		} else {
+		}
 	}
-	
-	method puedeMover(direccion, posicion){
+
+	method puedeMover(direccion, posicion) {
 		return not direccion.esBorde(posicion)
 	}
-	
-	method disparar(){
-		if (balas.hayBalas()){
-		game.sound("disparo.mp3").play()
-		balas.restarUnaBala()
-		self.removerSiHayObjetivo()
+
+	method disparar() {
+		if (balas.hayBalas()) {
+			game.sound("disparo.mp3").play()
+			balas.restarUnaBala()
+			self.removerSiHayObjetivos()
+		} else {
+			game.sound("noMasBalas.mp3").play()
 		}
-		else {game.sound("noMasBalas.mp3").play()}
 	}
-	
-	method removerSiHayObjetivo(){
-		return if (game.colliders(self).size() == 1){
+
+	method removerSiHayObjetivos() {
+		if (self.hayObjetivos()) {
 			contador.sumar(self.puntosDelObjetivo())
-			game.removeVisual(game.uniqueCollider(self))
-		} else {}
+			self.removerObjetivos()
+		} else {
+		}
 	}
 	
-	method puntosDelObjetivo(){
-		return game.uniqueCollider(self).puntos()
-	}
+	method removerObjetivos() = 
+		self.objetivosDisparados().forEach{objetivo => game.removeVisual(objetivo)}
+	
+
+	method hayObjetivos() = game.colliders(self).size() > 0
+
+	method puntosDelObjetivo() = self.objetivosDisparados().sum{ objetivo => objetivo.puntos()}
+
+	method objetivosDisparados() = game.colliders(self)
+
 }
 
-object derecha{
+object derecha {
 
 	method siguiente(posicion) {
 		return posicion.right(1)
-		}
-	method esBorde(posicion){
+	}
+
+	method esBorde(posicion) {
 		return posicion.x() == game.width() - 1
 	}
-	
-	method fueraDelMapa(posicion){
-		return posicion.x() == game.width()
-	}
-	
+
+	method imagenDePato() = "ave_derecha.png"
+
+	method imagenDeCiervo() = "ciervo_derecha.png"
+
 }
 
 object izquierda {
-	
-	method siguiente(posicion){
+
+	method siguiente(posicion) {
 		return posicion.left(1)
-		}
-		
-	method esBorde(posicion){
+	}
+
+	method esBorde(posicion) {
 		return posicion.x() == 0
 	}
-	
-	method fueraDelMapa(posicion){
-		return posicion.x() == -1
-	}
+
+	method imagenDePato() = "ave_izquierda.png"
+
+	method imagenDeCiervo() = "ciervo_izquierda.png"
+
 }
 
 object arriba {
@@ -76,10 +87,11 @@ object arriba {
 	method siguiente(posicion) {
 		return posicion.up(1)
 	}
-	
-	method esBorde(posicion){
+
+	method esBorde(posicion) {
 		return posicion.y() == game.height() - 1
 	}
+
 }
 
 object abajo {
@@ -87,8 +99,9 @@ object abajo {
 	method siguiente(posicion) {
 		return posicion.down(1)
 	}
-	
-	method esBorde(posicion){
+
+	method esBorde(posicion) {
 		return posicion.y() == 0
 	}
+
 }

@@ -4,61 +4,58 @@ import extras.*
 import balasYCargador.*
 import puntuacion.*
 
-// ------------------------------------ GESTOR CIERVOS ---------------------------------------- //
+//---------------------------------------GESTOR SUPERCLASE-----------------------------------------//
+class Gestor {
 
-object gestorCiervos {
+	const animalitos = []
 
-	method generarCiervo() {
-		const nuevoCiervo = new Ciervo(position = randomizerTerrestres.emptyPosition())
-	
-		game.addVisual(nuevoCiervo)
-		game.schedule(1500, {self.moverCiervo(nuevoCiervo)})
-		game.schedule(randomTiempo.generar(), {self.generarCiervo()})
+	method agregar() {
+		const animal = self.generar()
+		animalitos.add(animal)
+		game.addVisual(animal)
 	}
-	
-	method moverCiervo(ciervo){
-		if (ciervo.soyVisible(ciervo)){
-			game.onTick(280, "correCiervin", {ciervo.mover()})
-		}
-		else {game.removeVisual(ciervo)}
-	}	
-	
+
+	method generar()
+
+	method mover() {
+		animalitos.forEach({ animal => game.schedule(randomTiempo.generar(), { animal.mover()})})
+	}
+
 	method eliminar(posicion) {
+		animalitos.removeAllSuchThat{ animal => animal.position() == posicion}
 	}
 
 }
+
+// ------------------------------------ GESTOR CIERVOS ---------------------------------------- //
+object gestorCiervos inherits Gestor {
+
+	override method generar() = new Ciervo(position = randomizerTerrestres.emptyPosition())
+
+	method generarCiervos() {
+		game.onTick(3000, "crearCiervos", { self.agregar()})
+	}
+
+}
+
 // ------------------------------------ GESTOR PATOS ---------------------------------------- //
-object gestorPatos {
-	
-	const patitos = []
+object gestorPatos inherits Gestor {
+
+	override method generar() = new Pato(position = randomizerPatos.emptyPosition())
 
 	method generarPatos() {
-		const nuevoPato = new Pato(position = randomizerPatos.emptyPosition())
-		
-		patitos.add(nuevoPato)
-		game.addVisual(nuevoPato)
-	}
-	
-	method moverPatos(){
-		patitos.forEach({ patito => patito.mover()})
-	}
-	
-	method eliminar(posicion) {
-		patitos.filter({patito=> patito.position() != posicion})
+		game.onTick(randomTiempo.generar(), "crearPatos", { self.agregar()})
 	}
 
 }
 
 // ------------------------------------ GESTOR TOPOS ---------------------------------------- //
+object gestorTopos inherits Gestor {
 
-object gestorTopos {
+	override method generar() = new Topo(position = randomizerTerrestres.emptyPosition())
 
-	method generarTopo() {
-		const nuevoTopo = new Topo(position = randomizerTerrestres.emptyPosition())
-	
-		game.addVisual(nuevoTopo)
-		game.schedule(2000, {nuevoTopo.mover()})
-		game.schedule(3000, {self.generarTopo()})
+	method generarTopos() {
+		game.onTick(randomTiempo.generar(), "crearTopos", { self.agregar()})
 	}
 
 }
