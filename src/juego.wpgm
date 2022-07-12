@@ -26,6 +26,7 @@ program juego {
 	game.onTick(0, "sonidoFondoP",{game.sound("bosque.mp3").play()} )
 	game.onTick(21000, "sonidoFondo", {game.sound("bosque.mp3").play()})
 	game.schedule(1, {game.removeTickEvent("sonidoFondoP")})
+	game.schedule(randomTiempo.generar(), {gestorCiervos.generarCiervos()})
 	
 	game.start()
 }
