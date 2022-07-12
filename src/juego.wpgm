@@ -3,6 +3,7 @@ import mira.*
 import extras.*
 import balasYCargador.*
 import puntuacion.*
+import gestoresComportamiento.*
 
 program juego {
 	game.title("Juego Base")
@@ -21,12 +22,12 @@ program juego {
 	keyboard.up().onPressDo({ mira.mover(arriba) })
 	keyboard.down().onPressDo({ mira.mover(abajo) })
 	keyboard.e().onPressDo({ mira.disparar() })
-	game.onTick(3000, "generadorPatos", {gestorPatos.generarPatos()})
+	game.onTick(4500, "generadorPatos", {gestorPatos.generarPatos()})
 	game.onTick(1000, "movedorPatos", {gestorPatos.moverPatos()})
-	game.onTick(0, "sonidoFondoP",{game.sound("bosque.mp3").play()} )
 	game.onTick(21000, "sonidoFondo", {game.sound("bosque.mp3").play()})
-	game.schedule(1, {game.removeTickEvent("sonidoFondoP")})
-	game.schedule(randomTiempo.generar(), {gestorCiervos.generarCiervos()})
+	game.schedule(0, {game.sound("bosque.mp3").play()})
+	game.schedule(randomTiempo.generar(), {gestorCiervos.generarCiervo()})
+	game.schedule(2500, {gestorTopos.generarTopo()})
 	
 	game.start()
 }

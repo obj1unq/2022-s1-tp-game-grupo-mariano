@@ -49,6 +49,11 @@ object derecha{
 	method esBorde(posicion){
 		return posicion.x() == game.width() - 1
 	}
+	
+	method fueraDelMapa(posicion){
+		return posicion.x() == game.width()
+	}
+	
 }
 
 object izquierda {
@@ -59,6 +64,10 @@ object izquierda {
 		
 	method esBorde(posicion){
 		return posicion.x() == 0
+	}
+	
+	method fueraDelMapa(posicion){
+		return posicion.x() == -1
 	}
 }
 

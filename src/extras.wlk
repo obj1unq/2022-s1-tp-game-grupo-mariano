@@ -1,19 +1,21 @@
 import wollok.game.*
 import mira.*
 import balasYCargador.*
+import gestoresComportamiento.*
+
+
+// --------------------------------- SUPERCLASE OBJETOS EXTRAS ------------------------------------ //
 
 class Objetivo{
 	var property position = game.at(5,5)
-	const lado = self.deQueLado()
+	const property lado = self.deQueLado()
 	
 	method image() = null
 	
-	method puntos(){
-		return null
-	}
+	method puntos() = null
 	
 	method mover(){
-		lado.siguiente(self.position())
+		lado.siguiente(self.position())// <--- AGREGADO SOLAMENTE PARA QUE NO MOLESTE WOLLOK CON LA CONSTANTE LADO
 	}
 	
 	method deQueLado() {
@@ -21,22 +23,29 @@ class Objetivo{
 		 	derecha
 		 } else izquierda
 	}
+	
+	method soyVisible(animal){
+		return not animal.lado().fueraDelMapa(animal.position())
+	}
 }
 
+// ------------------------------------ CLASES ANIMALES Y CAZADORES ---------------------------------------- //
+// PATOS-----------
 class Pato inherits Objetivo {
 	
-	override method puntos() = 5
+	override method puntos() = 15
 	
 	override method image() = "ave_" + lado.toString() + ".png"
 	
 	override method mover(){
-		if (game.hasVisual(self)){
+		if (game.hasVisual(self) and self.soyVisible(self)){
 			self.position(lado.siguiente(self.position()))
 		}
 		else {gestorPatos.eliminar(position)}
 	}
 }
 
+// CIERVOS-----------
  class Ciervo inherits Objetivo {
 	
 	override method puntos() = 50
@@ -54,51 +63,23 @@ class Pato inherits Objetivo {
 	}
 }
 
-object gestorCiervos {
+// TOPOS-----------
+class Topo inherits Objetivo {
 	
-	//const ciervitos = []
-
-	method generarCiervos() {
-		const nuevoCiervo = new Ciervo(position = randomizerCiervos.emptyPosition())
+	override method puntos() = 5
 	
-		//ciervitos.add(nuevoCiervo)
-		game.addVisual(nuevoCiervo)
-		game.schedule(1500, {self.moverCiervos(nuevoCiervo)})
-		game.schedule(randomTiempo.generar(), {self.generarCiervos()})
-	}
+	override method image() = "topo.png"
 	
-	method moverCiervos(ciervo){
-		game.onTick(300, "correCiervin", {ciervo.mover()})
-//		ciervitos.forEach({ ciervito => ciervito.mover()})
+	override method mover(){
+		if (game.hasVisual(self)){
+			game.removeVisual(self)
+		} else {}
 	}
-
-	method eliminar(posicion) {
-		//ciervitos.filter({ciervito=> ciervito.position() != posicion})
-	}
-
 }
 
-object gestorPatos {
-	
-	const patitos = []
+// --------------------------------- RANDOMIZADORES DE TIEMPO Y POSICIONES ------------------------------------ //
 
-	method generarPatos() {
-		const nuevoPato = new Pato(position = randomizerPatos.emptyPosition())
-		
-		patitos.add(nuevoPato)
-		game.addVisual(nuevoPato)
-	}
-	
-	method moverPatos(){
-		patitos.forEach({ patito => patito.mover()})
-	}
-	
-	method eliminar(posicion) {
-		patitos.filter({patito=> patito.position() != posicion})
-	}
-
-}
-
+// TIEMPO-----------
 object randomTiempo{
 	
 	method generar(){
@@ -106,6 +87,7 @@ object randomTiempo{
 	}
 }
 
+// POSICIONES GENERAL-----------
 class Random{
 	
 	method position(){
@@ -123,6 +105,7 @@ class Random{
 	}
 }
 
+// POSICIONES CIELO-----------
 object randomizerPatos inherits Random {
 		
 	override method position() {
@@ -133,7 +116,8 @@ object randomizerPatos inherits Random {
 	}
 }
 
-object randomizerCiervos inherits Random {
+// POSICIONES TIERRA-----------
+object randomizerTerrestres inherits Random {
 		
 	override method position() {
 		return 	game.at( 
