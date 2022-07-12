@@ -1,6 +1,7 @@
 import wollok.game.*
 import balasYCargador.*
 import extras.*
+import puntuacion.*
 
 object mira {
 
@@ -30,20 +31,15 @@ object mira {
 	
 	method removerSiHayObjetivo(){
 		return if (game.colliders(self).size() == 1){
+			contador.sumar(self.puntosDelObjetivo())
 			game.removeVisual(game.uniqueCollider(self))
 		} else {}
 	}
-}
-
-/*	method siguiente(posicion) {
-		return if (not self.esBorde(posicion)){
-		posicion.right(1)
-		}
-		else {posicion}
+	
+	method puntosDelObjetivo(){
+		return game.uniqueCollider(self).puntos()
 	}
-	method esBorde(posicion){
-		return posicion.x() == game.width() - 1
-	}*/
+}
 
 object derecha{
 

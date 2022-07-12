@@ -5,6 +5,7 @@ import balasYCargador.*
 class Pato {
 	var property position = game.at(5,5)
 	const lado = self.deQueLado()
+	var property puntos = 5
 	
 	method image() = "ave_" + lado.toString() + ".png"
 	

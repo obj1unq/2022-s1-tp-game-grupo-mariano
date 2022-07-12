@@ -2,6 +2,7 @@ import wollok.game.*
 import mira.*
 import extras.*
 import balasYCargador.*
+import puntuacion.*
 
 program juego {
 	game.title("Juego Base")
@@ -12,6 +13,8 @@ program juego {
 	game.addVisual(mira)
 	game.addVisual(balas)
 	game.addVisual(cartucho)
+	game.addVisual(tituloPuntuacion)
+	game.addVisual(puntuacion)
 	
 	keyboard.left().onPressDo({ mira.mover(izquierda) })
 	keyboard.right().onPressDo({ mira.mover(derecha) })
@@ -20,8 +23,9 @@ program juego {
 	keyboard.e().onPressDo({ mira.disparar() })
 	game.onTick(3000, "generadorPatos", {gestorPatos.generarPatos()})
 	game.onTick(1000, "movedorPatos", {gestorPatos.moverPatos()})
+	game.onTick(0, "sonidoFondoP",{game.sound("bosque.mp3").play()} )
 	game.onTick(21000, "sonidoFondo", {game.sound("bosque.mp3").play()})
-	
+	game.schedule(1, {game.removeTickEvent("sonidoFondoP")})
 	
 	game.start()
 }
