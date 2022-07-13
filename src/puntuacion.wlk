@@ -12,6 +12,10 @@ object tituloPuntuacion {
 	method text() = "PUNTUACION : "
 	
 	method textColor() = "#1d15b3cc"
+	
+	method puntos() = 0
+	
+	method cartuchosSoltados() = 0
 }
 
 object puntuacion {
@@ -20,11 +24,21 @@ object puntuacion {
 	method text() = contador.score().printString()
 	
 	method textColor() = "#1d15b3cc"
+	
+	method puntos() = 0
+	
+	method cartuchosSoltados() = 0
 }
+
+
 object contador{
 	var property score = 0
 	
 	method sumar(puntos){
 		score = score + puntos
 	}
+	
+	method puntos() = 0
+	
+	method cartuchosSoltados() = 0
 }

@@ -4,6 +4,7 @@ import extras.*
 import balasYCargador.*
 import puntuacion.*
 import gestoresComportamiento.*
+import cazadores.*
 
 object escenario {
 
@@ -21,6 +22,7 @@ object escenario {
 		game.onTick(500, "corranCiervitos", { gestorCiervos.mover()})
 		game.onTick(800, "vuelenPatos", { gestorPatos.mover()})
 		game.onTick(1000, "escandanseTopos", { gestorTopos.mover()})
+		gestorCazadores.generar()
 		game.onTick(0, "sonidoFondoP", { game.sound("bosque.mp3").play()})
 		game.onTick(21000, "sonidoFondo", { game.sound("bosque.mp3").play()})
 		game.schedule(1, { game.removeTickEvent("sonidoFondoP")})
@@ -50,6 +52,15 @@ object pantallaInicio {
 		game.addVisual(self)
 	}
 
+}
+
+object pantallaMuerte {
+	var property position = game.at(0, 0)
+	var property image = "fondogameover.png"
+	
+	method poner() {
+		game.addVisual(self)
+	}
 }
 
 object menu {

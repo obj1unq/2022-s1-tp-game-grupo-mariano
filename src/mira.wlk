@@ -11,6 +11,13 @@ object mira {
 
 	method image() = "mira2.png"
 
+	method perdi() {
+		game.clear()
+		pantallaMuerte.poner()
+		game.schedule(2000, {game.stop()})
+		
+	}
+
 	method mover(direccion) {
 		return if (self.puedeMover(direccion, position)) {
 			position = direccion.siguiente(self.position())
@@ -23,7 +30,7 @@ object mira {
 	}
 
 	method disparar() {
-		if (balas.hayBalas()) {
+		if (balas.hayBalas() ) {
 			game.sound("disparo.mp3").play()
 			balas.restarUnaBala()
 			self.removerSiHayObjetivos()
@@ -33,20 +40,23 @@ object mira {
 	}
 
 	method removerSiHayObjetivos() {
-		if (self.hayObjetivos()) {
+		if (self.hayObjetivos() ) {
 			contador.sumar(self.puntosDelObjetivo())
+			cartucho.recargar(self.balasDelObjetivo())
 			self.removerObjetivos()
 		} else {
 		}
 	}
 	
 	method removerObjetivos() = 
-		self.objetivosDisparados().forEach{objetivo => game.removeVisual(objetivo)}
+		self.objetivosDisparados().forEach{objetivo => game.removeVisual(objetivo) objetivo.estaVivo(false)}
 	
 
 	method hayObjetivos() = game.colliders(self).size() > 0
 
 	method puntosDelObjetivo() = self.objetivosDisparados().sum{ objetivo => objetivo.puntos()}
+	
+	method balasDelObjetivo() = self.objetivosDisparados().sum{ objetivo => objetivo.cartuchosSoltados()}
 
 	method objetivosDisparados() = game.colliders(self)
 
@@ -111,7 +121,7 @@ object abajo {
 	}
 
 	method esBorde(posicion) {
-		return posicion.y() == 0
+		return posicion.y() == 1
 	}
 	
 }

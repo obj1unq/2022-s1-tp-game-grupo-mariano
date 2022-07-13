@@ -8,6 +8,7 @@ class Objetivo {
 
 	var property position
 	const lado = self.deQueLado()
+	
 
 	method deQueLado() {
 		return if (self.position().x() == 0) {
@@ -24,6 +25,10 @@ class Objetivo {
 	}
 
 	method salirDelJuego(posicion)
+	
+	method estaVivo(estado) = false  /// NO LO UTILIZA LA CLASE, ES PARA QUE TENGA POLIMORFISMO CON LOS CAZADORES Y NO DAR ERROR
+
+	method cartuchosSoltados() = 0
 
 }
 
@@ -31,7 +36,7 @@ class Objetivo {
 // PATOS-----------
 class Pato inherits Objetivo {
 
-	var property puntos = 5
+	var property puntos = 20
 
 	method image() = lado.imagenDePato()
 
@@ -44,7 +49,7 @@ class Pato inherits Objetivo {
 // CIERVOS-----------
 class Ciervo inherits Objetivo {
 
-	var property puntos = 50
+	var property puntos = 40
 
 	method image() = lado.imagenDeCiervo()
 
@@ -61,7 +66,7 @@ class Ciervo inherits Objetivo {
 // TOPOS-----------
 class Topo inherits Objetivo {
 
-	var property puntos = 5
+	var property puntos = 10
 
 	method image() = "topo.png"
 
@@ -83,7 +88,11 @@ class Topo inherits Objetivo {
 object randomTiempo {
 
 	method generar() {
-		return (2000.2100 .. 3000).anyOne()
+		return (2500.2600 .. 6000).anyOne()
+	}
+	
+	method movimiento() {
+		return (500.600 .. 2000).anyOne()
 	}
 
 }
@@ -108,7 +117,7 @@ class Random {
 object randomizerPatos inherits Random {
 
 	override method position() {
-		return game.at([ 0, game.width() - 1 ].anyOne(), (8 .. game.height() - 1).anyOne())
+		return game.at([ 0, game.width() - 1 ].anyOne(), (7 .. game.height() - 1).anyOne())
 	}
 
 }

@@ -6,7 +6,6 @@ import puntuacion.*
 import gestoresComportamiento.*
 import juego.*
 
-const musicainicio = game.sound("musicainicio.mp3")
 
 program juego {
 	game.title("Wollok Hunt")

@@ -18,7 +18,7 @@ class Gestor {
 	method generar()
 
 	method mover() {
-		animalitos.forEach({ animal => game.schedule(randomTiempo.generar(), { animal.mover()})})
+		animalitos.forEach({ animal => game.schedule(randomTiempo.movimiento(), { animal.mover()})})
 	}
 
 	method eliminar(posicion) {
@@ -33,7 +33,7 @@ object gestorCiervos inherits Gestor {
 	override method generar() = new Ciervo(position = randomizerTerrestres.emptyPosition())
 
 	method generarCiervos() {
-		game.onTick(3000, "crearCiervos", { self.agregar()})
+		game.onTick(randomTiempo.generar(), "crearCiervos", { self.agregar()})
 	}
 
 }
@@ -44,7 +44,7 @@ object gestorPatos inherits Gestor {
 	override method generar() = new Pato(position = randomizerPatos.emptyPosition())
 
 	method generarPatos() {
-		game.onTick(randomTiempo.generar(), "crearPatos", { self.agregar()})
+		game.onTick(2500, "crearPatos", { self.agregar()})
 	}
 
 }
@@ -59,4 +59,12 @@ object gestorTopos inherits Gestor {
 	}
 
 }
+
+
+
+//----------------------------------------------------CAZADORES-----------------------------//
+
+
+
+
 
