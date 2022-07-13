@@ -2,6 +2,8 @@ import wollok.game.*
 import mira.*
 import extras.*
 import balasYCargador.*
+import gestoresComportamiento.*
+import juego.*
 
 
 object tituloPuntuacion {

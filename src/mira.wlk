@@ -1,7 +1,9 @@
 import wollok.game.*
-import balasYCargador.*
 import extras.*
+import balasYCargador.*
 import puntuacion.*
+import gestoresComportamiento.*
+import juego.*
 
 object mira {
 
@@ -83,6 +85,10 @@ object izquierda {
 }
 
 object arriba {
+	
+	method dosCeldas(posicion) {
+		return posicion.up(2)
+	}
 
 	method siguiente(posicion) {
 		return posicion.up(1)
@@ -95,6 +101,10 @@ object arriba {
 }
 
 object abajo {
+	
+	method dosCeldas(posicion) {
+		return posicion.down(2)
+	}
 
 	method siguiente(posicion) {
 		return posicion.down(1)
@@ -103,5 +113,5 @@ object abajo {
 	method esBorde(posicion) {
 		return posicion.y() == 0
 	}
-
+	
 }
