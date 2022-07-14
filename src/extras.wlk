@@ -130,4 +130,3 @@ object randomizerTerrestres inherits Random {
 	}
 
 }
-

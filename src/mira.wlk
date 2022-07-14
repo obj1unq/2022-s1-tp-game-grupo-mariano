@@ -14,23 +14,18 @@ object mira {
 	method perdi() {
 		game.clear()
 		pantallaMuerte.poner()
-		game.schedule(2000, {game.stop()})
-		
+		game.schedule(2000, { game.stop()})
 	}
 
 	method mover(direccion) {
-		return if (self.puedeMover(direccion, position)) {
-			position = direccion.siguiente(self.position())
+		return if (not direccion.esBorde(position)) {
+			position = direccion.siguiente(position)
 		} else {
 		}
 	}
 
-	method puedeMover(direccion, posicion) {
-		return not direccion.esBorde(posicion)
-	}
-
 	method disparar() {
-		if (balas.hayBalas() ) {
+		if (balas.hayBalas()) {
 			game.sound("disparo.mp3").play()
 			balas.restarUnaBala()
 			self.removerSiHayObjetivos()
@@ -40,23 +35,24 @@ object mira {
 	}
 
 	method removerSiHayObjetivos() {
-		if (self.hayObjetivos() ) {
+		if (self.hayObjetivos()) {
 			contador.sumar(self.puntosDelObjetivo())
 			cartucho.recargar(self.balasDelObjetivo())
 			self.removerObjetivos()
 		} else {
 		}
 	}
-	
-	method removerObjetivos() = 
-		self.objetivosDisparados().forEach{objetivo => game.removeVisual(objetivo) objetivo.estaVivo(false)}
-	
+
+	method removerObjetivos() = self.objetivosDisparados().forEach{ objetivo =>
+		game.removeVisual(objetivo)
+		objetivo.estaVivo(false)
+	}
 
 	method hayObjetivos() = game.colliders(self).size() > 0
 
-	method puntosDelObjetivo() = self.objetivosDisparados().sum{ objetivo => objetivo.puntos()}
-	
-	method balasDelObjetivo() = self.objetivosDisparados().sum{ objetivo => objetivo.cartuchosSoltados()}
+	method puntosDelObjetivo() = self.objetivosDisparados().sum{ objetivo => objetivo.puntos() }
+
+	method balasDelObjetivo() = self.objetivosDisparados().sum{ objetivo => objetivo.cartuchosSoltados() }
 
 	method objetivosDisparados() = game.colliders(self)
 
@@ -95,7 +91,7 @@ object izquierda {
 }
 
 object arriba {
-	
+
 	method dosCeldas(posicion) {
 		return posicion.up(2)
 	}
@@ -111,7 +107,7 @@ object arriba {
 }
 
 object abajo {
-	
+
 	method dosCeldas(posicion) {
 		return posicion.down(2)
 	}
@@ -123,5 +119,5 @@ object abajo {
 	method esBorde(posicion) {
 		return posicion.y() == 1
 	}
-	
+
 }

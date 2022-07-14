@@ -7,6 +7,8 @@ import gestoresComportamiento.*
 import cazadores.*
 
 object escenario {
+	
+	const musicaJuego = game.sound("Bosque.mp3")
 
 	method iniciar() {
 		menu.musica().stop()
@@ -23,9 +25,7 @@ object escenario {
 		game.onTick(800, "vuelenPatos", { gestorPatos.mover()})
 		game.onTick(1000, "escandanseTopos", { gestorTopos.mover()})
 		gestorCazadores.generar()
-		game.onTick(0, "sonidoFondoP", { game.sound("bosque.mp3").play()})
-		game.onTick(21000, "sonidoFondo", { game.sound("bosque.mp3").play()})
-		game.schedule(1, { game.removeTickEvent("sonidoFondoP")})
+		musicaJuego.shouldLoop(true)
 	}
 
 }
@@ -43,10 +43,9 @@ object config {
 }
 
 //-----------------------------------------------------PANTALLA INICIO-----------------------------------------//
-object pantallaInicio {
+class Pantalla {
 
 	var property position = game.at(0, 0)
-	var property image = "fondoinicio.png"
 
 	method poner() {
 		game.addVisual(self)
@@ -54,35 +53,39 @@ object pantallaInicio {
 
 }
 
-object pantallaMuerte {
-	var property position = game.at(0, 0)
+object pantallaInicio inherits Pantalla {
+
+	var property image = "fondoinicio.png"
+
+}
+
+object pantallaMuerte inherits Pantalla {
+
 	var property image = "fondogameover.png"
-	
-	method poner() {
-		game.addVisual(self)
-	}
+
 }
 
 object menu {
-	
-	const property musica = game.sound("musicainicio.mp3")
 
+	const property musica = game.sound("musicainicio.mp3")
 	const opciones = [ empezar, controles, creditos, salir ]
 
 	method cargarControles() {
 		keyboard.up().onPressDo{ selector.mover(arriba)}
 		keyboard.down().onPressDo{ selector.mover(abajo)}
-		keyboard.enter().onPressDo{ self.opcionSeleccionada().activar()}
-		keyboard.space().onPressDo{ self.opcionSeleccionada().salir()}
+		keyboard.enter().onPressDo{ self.opcionSeleccionada().activar(self.visualesSeleccion())}
+		keyboard.space().onPressDo{ self.opcionSeleccionada().salir(self.visualesSeleccion())}
 	}
 
 	method opcionSeleccionada() = opciones.find{ opcion => opcion.estaSeleccionado() }
-	
+
+	method visualesSeleccion() = self.opcionSeleccionada().visuales()
+
 	method reproducirMusica() {
 		self.musica().shouldLoop(true)
-		game.schedule(300, { musica.play() })
+		game.schedule(300, { musica.play()})
 	}
-	
+
 }
 
 //---------------------------------OPCIONES-----------------------------//
@@ -96,18 +99,40 @@ class Opcion {
 
 	method position()
 
+	method activar(eleccion) {
+		if (not eleccion.estanVisibles()) {
+			eleccion.estanVisibles(true)
+			self.mostrar(eleccion)
+		}
+	}
+
+	method mostrar(eleccion) {
+		selector.estoyEnMenu(false)
+		game.addVisual(eleccion)
+	}
+
+	method salir(eleccion) {
+		if (not selector.estoyEnMenu()) {
+			game.removeVisual(eleccion)
+			selector.estoyEnMenu(true)
+			eleccion.estanVisibles(false)
+		}
+	}
+
+	method visuales() = null
+
 }
 
 object empezar inherits Opcion {
 
-	var property image = "empezar.png"
+	method image() = "empezar.png"
 
-	method activar() {
+	override method position() = game.at(5, 7)
+
+	override method activar(eleccion) {
 		game.clear()
 		escenario.iniciar()
 	}
-
-	override method position() = game.at(5, 7)
 
 	method salir() {
 	}
@@ -116,42 +141,11 @@ object empezar inherits Opcion {
 
 object controles inherits Opcion {
 
-	var property position = game.at(5, 5)
-	var property image = "controles.png"
+	override method position() = game.at(5, 5)
 
-	method activar() {
-		if (not teclas.estanVisibles()) {
-			self.mostrarControles()
-			teclas.estanVisibles(true)
-		}
-	}
+	method image() = "controles.png"
 
-	method mostrarControles() {
-		selector.estoyEnMenu(false)
-		game.addVisual(teclas)
-	}
-
-	method salir() {
-		if (not selector.estoyEnMenu()) {
-			game.removeVisual(teclas)
-			selector.estoyEnMenu(true)
-			teclas.estanVisibles(false)
-		}
-	}
-
-}
-
-object salir inherits Opcion {
-
-	var property position = game.at(5, 1)
-	var property image = "salir.png"
-
-	method activar() {
-		game.stop()
-	}
-
-	method salir() {
-	}
+	override method visuales() = teclas
 
 }
 
@@ -160,24 +154,21 @@ object creditos inherits Opcion {
 	var property position = game.at(5, 3)
 	var property image = "creditos.png"
 
-	method activar() {
-		if (not nombres.estanVisibles()) {
-			self.mostrarCreditos()
-			nombres.estanVisibles(true)
-		}
-	}
+	override method visuales() = nombres
 
-	method mostrarCreditos() {
-		selector.estoyEnMenu(false)
-		game.addVisual(nombres)
+}
+
+object salir inherits Opcion {
+
+	override method position() = game.at(5, 1)
+
+	method image() = "salir.png"
+
+	override method activar(eleccion) {
+		game.stop()
 	}
 
 	method salir() {
-		if (not selector.estoyEnMenu()) {
-			game.removeVisual(nombres)
-			selector.estoyEnMenu(true)
-			nombres.estanVisibles(false)
-		}
 	}
 
 }
@@ -185,17 +176,21 @@ object creditos inherits Opcion {
 //-------------------------------------------PANTALLA CREDITOS Y CONTROLES-----------------------------//
 object nombres {
 
-	var property position = game.at(0, 0)
-	var property image = "fondocreditos.png"
 	var property estanVisibles = false
+
+	method position() = game.at(0, 0)
+
+	method image() = "fondocreditos.png"
 
 }
 
 object teclas {
 
-	var property position = game.at(0, 0)
-	var property image = "fondocontroles.jpg"
 	var property estanVisibles = false
+
+	method position() = game.at(0, 0)
+
+	method image() = "fondocontroles.jpg"
 
 }
 
@@ -221,4 +216,3 @@ object selector {
 	method estaAbajo(direccion) = direccion.siguiente(self.position()).y() == 0
 
 }
-

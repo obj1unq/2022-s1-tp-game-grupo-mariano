@@ -1,57 +1,58 @@
 import wollok.game.*
 
-object balas {
+class Pistola {
 
-	const property position = game.at(2, 0)
-	var property cantidad = 6
-
-	method image() = "balas" + cantidad.toString() + ".png"
-
-	method hayBalas() {
-		return cartucho.quedanCartuchos() || cantidad != 0
+	var cantidad = 6
+	
+	method image() = cantidad.toString() + ".png"
+	
+	method llenar() {
+		cantidad = 6
 	}
-
-	method restarUnaBala() {
-		if (cantidad <= 1 && cartucho.quedanCartuchos()) {
-			cantidad = 6
-			cartucho.restarCartucho()
-		} else {
-			cantidad = cantidad - 1
-		}
+	
+	method restarUnidad() {
+		cantidad = cantidad - 1
 	}
-
-	method puntos() = 0
-
-	method cartuchosSoltados() = 0
 
 }
 
-object cartucho {
+object balas inherits Pistola {
 
-	const property position = game.at(0, 0)
-	var property cantidad = 6
+	const property position = game.at(2, 0)
 
-	method image() = "cartucho" + cantidad.toString() + ".png"
+	override method image() = "balas" + super()
+
+	method hayBalas() {
+		return cartucho.quedanCartuchos() or cantidad != 0
+	}
+
+	method restarUnaBala() {
+		if (cantidad <= 1 and cartucho.quedanCartuchos()) {
+			self.llenar()
+			cartucho.restarUnidad()
+		} else {
+			self.restarUnidad()
+		}
+	}
+
+}
+
+object cartucho inherits Pistola {
+
+	const property  position = game.at(0, 0)
+
+	override method image() = "cartucho" + super()
 
 	method quedanCartuchos() {
 		return cantidad > 0
 	}
 
-	method restarCartucho() {
-		cantidad = cantidad - 1
-	}
-
-	method estaLleno() = cantidad == 6
-
-	method puntos() = 0
+	method sumaDe(cartuchos) = cantidad + cartuchos
 
 	method recargar(cartuchos) {
-		if (cartuchos + cantidad >= 6) {
-			cantidad = 6
-		} else cantidad = cartuchos + cantidad
+		if (self.sumaDe(cartuchos) >= 6) {
+			self.llenar()
+		} else cantidad = self.sumaDe(cartuchos)
 	}
 
-	method cartuchosSoltados() = 0 
-
 }
-

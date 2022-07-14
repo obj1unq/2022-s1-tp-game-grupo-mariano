@@ -8,9 +8,8 @@ import juego.*
 
 class Cazador {
 
-	var property tiempoParaEliminar
-	var property cartuchosSoltados
-	var property estaVivo
+	var property position = game.center()
+	var property estaVivo = false
 
 	method puntos() = 0
 
@@ -22,41 +21,38 @@ class Cazador {
 		}
 	}
 
-}
-
-class Hombre inherits Cazador(tiempoParaEliminar = 6000, cartuchosSoltados = 1, estaVivo = false) {
-
-	var property image = "hombre.png"
-	var property position = game.center()
-
 	method aparecer() {
 		game.addVisual(self)
-		game.schedule(tiempoParaEliminar, { self.disparar()})
+		game.schedule(self.tiempoParaEliminar(), { self.disparar()})
 	}
+
+	method tiempoParaEliminar()
 
 }
 
-class Vieja inherits Cazador(tiempoParaEliminar = 2500, cartuchosSoltados = 6, estaVivo = false) {
+class Hombre inherits Cazador {
 
-	var property image = "abuela.png"
-	var property position = game.center()
+	const property cartuchosSoltados = 1
+	const property image = "hombre.png"
 
-	method aparecer() {
-		game.addVisual(self)
-		game.schedule(tiempoParaEliminar, { self.disparar()})
-	}
+	override method tiempoParaEliminar() = 6000
 
 }
 
-class Pibe inherits Cazador(tiempoParaEliminar = 4000, cartuchosSoltados = 2, estaVivo = false) {
+class Vieja inherits Cazador {
 
-	var property image = "pibe.png"
-	var property position = game.center()
+	const property cartuchosSoltados = 6
+	const property image = "abuela.png"
 
-	method aparecer() {
-		game.addVisual(self)
-		game.schedule(tiempoParaEliminar, { self.disparar()})
-	}
+	override method tiempoParaEliminar() = 2500
+
+}
+
+class Pibe inherits Cazador {
+
+	const property cartuchosSoltados = 2
+
+	override method tiempoParaEliminar() = 4000
 
 }
 
@@ -64,7 +60,7 @@ object gestorCazadores {
 
 	method cazadorAleatorio() {
 		const numero = (0 .. 99).anyOne()
-		return if (numero > 59 and numero < 94) new Pibe() else if (numero > 93) new Vieja() else if (numero < 60) new Hombre()
+		return if (numero.between(59, 94)) new Pibe() else if (numero > 93) new Vieja() else if (numero < 60) new Hombre()
 	}
 
 	method agregar() {
@@ -83,4 +79,3 @@ object gestorCazadores {
 	}
 
 }
-
