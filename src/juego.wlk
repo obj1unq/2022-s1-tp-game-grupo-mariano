@@ -26,6 +26,7 @@ object escenario {
 		game.onTick(1000, "escandanseTopos", { gestorTopos.mover()})
 		gestorCazadores.generar()
 		musicaJuego.shouldLoop(true)
+		game.schedule(300, { musicaJuego.play()})
 	}
 
 }
