@@ -51,6 +51,7 @@ class Vieja inherits Cazador {
 class Pibe inherits Cazador {
 
 	const property cartuchosSoltados = 2
+	const property image = "pibe.png"
 
 	override method tiempoParaEliminar() = 4000
 
@@ -60,7 +61,7 @@ object gestorCazadores {
 
 	method cazadorAleatorio() {
 		const numero = (0 .. 99).anyOne()
-		return if (numero.between(59, 94)) new Pibe() else if (numero > 93) new Vieja() else if (numero < 60) new Hombre()
+		return if (numero.between(60, 93)) new Pibe() else if (numero > 93) new Vieja() else if (numero < 60) new Hombre()
 	}
 
 	method agregar() {
