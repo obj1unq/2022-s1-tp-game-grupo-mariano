@@ -65,12 +65,12 @@ object derecha {
 	}
 
 	method esBorde(posicion) {
-		return posicion.x() == game.width() - 1
+		return posicion.x() == game.width()
 	}
 
-	method imagenDePato() = "ave_derecha.png"
+	method imagenDePato(pato) = if (pato.estaEjeXPar()) "patoder1.png" else "patoder2.png"
 
-	method imagenDeCiervo() = "ciervo_derecha.png"
+	method imagenDeCiervo(ciervo) = if (ciervo.estaEjeXPar()) "ciervoder1.png" else "ciervoder2.png"
 
 }
 
@@ -81,13 +81,12 @@ object izquierda {
 	}
 
 	method esBorde(posicion) {
-		return posicion.x() == 0
+		return posicion.x() == -1
 	}
 
-	method imagenDePato() = "ave_izquierda.png"
+	method imagenDePato(pato) = if (pato.estaEjeXPar()) "patoizq1.png" else "patoizq2.png"
 
-	method imagenDeCiervo() = "ciervo_izquierda.png"
-
+	method imagenDeCiervo(ciervo) =  if (ciervo.estaEjeXPar()) "ciervoizq1.png" else "ciervoizq2.png"
 }
 
 object arriba {
@@ -121,3 +120,4 @@ object abajo {
 	}
 
 }
+

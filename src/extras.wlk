@@ -8,27 +8,34 @@ class Objetivo {
 
 	var property position
 	const lado = self.deQueLado()
-	
 
 	method deQueLado() {
 		return if (self.position().x() == 0) {
 			derecha
 		} else izquierda
 	}
-
+	
+	
 	method mover() {
-		if (game.hasVisual(self)) {
+		if (not lado.esBorde(self.position())) {
 			position = lado.siguiente(position)
+			game.schedule(randomTiempo.movimiento(), { self.mover()})
 		} else {
-			self.salirDelJuego(position)
+			self.removerDelJuegoSiPuede(self)
 		}
 	}
-
-	method salirDelJuego(posicion)
 	
-	method estaVivo(estado) = false  /// NO LO UTILIZA LA CLASE, ES PARA QUE TENGA POLIMORFISMO CON LOS CAZADORES Y NO DAR ERROR
+	method removerDelJuegoSiPuede(animal) {
+		if (game.hasVisual(animal)) {
+			game.removeVisual(animal)
+		}
+	}
+	
+	method estaVivo(cosa) = false
 
 	method cartuchosSoltados() = 0
+	
+	method estaEjeXPar() = position.x().even()
 
 }
 
@@ -38,11 +45,7 @@ class Pato inherits Objetivo {
 
 	var property puntos = 20
 
-	method image() = lado.imagenDePato()
-
-	override method salirDelJuego(posicion) {
-		gestorPatos.eliminar(posicion)
-	}
+	method image() = lado.imagenDePato(self)
 
 }
 
@@ -51,15 +54,12 @@ class Ciervo inherits Objetivo {
 
 	var property puntos = 40
 
-	method image() = lado.imagenDeCiervo()
-
-	override method salirDelJuego(posicion) {
-		gestorCiervos.eliminar(posicion)
-	}
+	method image() = lado.imagenDeCiervo(self)
 
 	override method deQueLado() {
 		return [ derecha, izquierda ].anyOne()
 	}
+	
 
 }
 
@@ -72,14 +72,12 @@ class Topo inherits Objetivo {
 
 	override method mover() {
 		if (game.hasVisual(self)) {
-			game.removeVisual(self)
+			game.schedule(randomTiempo.generar(), {self.removerDelJuegoSiPuede(self)})
 		} else {
 		}
 	}
+	
 
-	override method salirDelJuego(posicion) {
-		gestorTopos.eliminar(posicion)
-	}
 
 }
 
@@ -88,11 +86,11 @@ class Topo inherits Objetivo {
 object randomTiempo {
 
 	method generar() {
-		return (2500.2600 .. 6000).anyOne()
+		return (2500.2600 .. 2000).anyOne()
 	}
-	
+
 	method movimiento() {
-		return (500.600 .. 2000).anyOne()
+		return (200.600 .. 600).anyOne()
 	}
 
 }
@@ -130,3 +128,4 @@ object randomizerTerrestres inherits Random {
 	}
 
 }
+

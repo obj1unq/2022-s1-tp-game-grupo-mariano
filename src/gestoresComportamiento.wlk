@@ -7,23 +7,13 @@ import puntuacion.*
 //---------------------------------------GESTOR SUPERCLASE-----------------------------------------//
 class Gestor {
 
-	const animalitos = []
-
 	method agregar() {
 		const animal = self.generar()
-		animalitos.add(animal)
 		game.addVisual(animal)
+		animal.mover()
 	}
 
 	method generar()
-
-	method mover() {
-		animalitos.forEach({ animal => game.schedule(randomTiempo.movimiento(), { animal.mover()})})
-	}
-
-	method eliminar(posicion) {
-		animalitos.removeAllSuchThat{ animal => animal.position() == posicion}
-	}
 
 }
 
@@ -44,7 +34,7 @@ object gestorPatos inherits Gestor {
 	override method generar() = new Pato(position = randomizerPatos.emptyPosition())
 
 	method generarPatos() {
-		game.onTick(2500, "crearPatos", { self.agregar()})
+		game.onTick(2000, "crearPatos", { self.agregar()})
 	}
 
 }
@@ -59,11 +49,4 @@ object gestorTopos inherits Gestor {
 	}
 
 }
-
-
-
-
-
-
-
 
