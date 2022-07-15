@@ -9,11 +9,10 @@
 
 
 ## Capturas
-
-![fondoinicio](https://user-images.githubusercontent.com/103133929/178805224-30becba8-8ad8-4b69-a5db-d5a968eba855.png)
+![fondoinicio](https://user-images.githubusercontent.com/102833227/179129366-03f6ff09-8bd3-484e-9000-7855778248ee.png)
 ![inicio](https://user-images.githubusercontent.com/103133929/178805339-01f166c0-43ef-40f0-a942-c4b7caddcf6f.jpg)
-![fondocontroles](https://user-images.githubusercontent.com/103133929/178805264-9d0050cd-3b99-41bf-92b6-44717f8a467c.jpg)
-![fondocreditos](https://user-images.githubusercontent.com/103133929/178805281-eebad017-b5cf-46da-b90e-59a9764c85ea.png)
+![fondocontroles](https://user-images.githubusercontent.com/102833227/179129596-bf8edfe9-0336-4c45-a2dd-f287a8ae4c3d.jpg)
+![fondocreditos](https://user-images.githubusercontent.com/102833227/179129463-c4ba36e8-7a3b-4e09-8021-f663db192863.png)
 ![juego1](https://user-images.githubusercontent.com/102833227/179128124-bb4781fc-6c50-47b9-9a07-a6b78393a2a0.png)
 ![juego2](https://user-images.githubusercontent.com/102833227/179128135-07e38981-e720-4ae1-a009-e926979ed850.png)
 
