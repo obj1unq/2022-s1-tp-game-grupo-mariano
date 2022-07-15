@@ -1,8 +1,24 @@
 import wollok.game.*
-import pepita.*
+import mira.*
+import extras.*
+import balasYCargador.*
+import puntuacion.*
+import gestoresComportamiento.*
+import juego.*
+
 
 program juego {
-	game.title("Juego Base")
-	game.addVisual(pepita)
+	game.title("Wollok Hunt")
+	game.height(14)
+	game.width(14)
+	game.boardGround("paisaje.jpg")
+	pantallaInicio.poner()
+	empezar.poner()
+	controles.poner()
+	creditos.poner()
+	salir.poner()
+	selector.poner()
+	menu.cargarControles()
+	menu.reproducirMusica()
 	game.start()
 }
