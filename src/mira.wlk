@@ -65,7 +65,7 @@ object derecha {
 	}
 
 	method esBorde(posicion) {
-		return posicion.x() == game.width()
+		return posicion.x() == game.width() - 1
 	}
 
 	method imagenDePato(pato) = if (pato.estaEjeXPar()) "patoder1.png" else "patoder2.png"
@@ -81,7 +81,7 @@ object izquierda {
 	}
 
 	method esBorde(posicion) {
-		return posicion.x() == -1
+		return posicion.x() == 0
 	}
 
 	method imagenDePato(pato) = if (pato.estaEjeXPar()) "patoizq1.png" else "patoizq2.png"

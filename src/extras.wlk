@@ -86,11 +86,11 @@ class Topo inherits Objetivo {
 object randomTiempo {
 
 	method generar() {
-		return (2500.2600 .. 2000).anyOne()
+		return (1000.1100 .. 2000).anyOne()
 	}
 
 	method movimiento() {
-		return (200.600 .. 600).anyOne()
+		return (100.200 .. 400).anyOne()
 	}
 
 }

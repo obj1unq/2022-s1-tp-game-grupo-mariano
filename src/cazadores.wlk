@@ -35,7 +35,7 @@ class Hombre inherits Cazador {
 	const property cartuchosSoltados = 1
 	const property image = "hombre.png"
 
-	override method tiempoParaEliminar() = 6000
+	override method tiempoParaEliminar() = 5000
 
 }
 
@@ -44,7 +44,7 @@ class Vieja inherits Cazador {
 	const property cartuchosSoltados = 6
 	const property image = "abuela.png"
 
-	override method tiempoParaEliminar() = 2500
+	override method tiempoParaEliminar() = 2000
 
 }
 
@@ -70,7 +70,8 @@ object gestorCazadores {
 			cazador.position(randomizerTerrestres.position())
 			cazador.estaVivo(true)
 			cazador.aparecer()
-			game.schedule((6000 .. 16000).anyOne(), { self.agregar()})
+			game.sound("saliendoarbustos.mp3").play()
+			self.generar()
 		} else {
 		}
 	}
