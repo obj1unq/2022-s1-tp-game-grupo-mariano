@@ -14,8 +14,9 @@
 ![inicio](https://user-images.githubusercontent.com/103133929/178805339-01f166c0-43ef-40f0-a942-c4b7caddcf6f.jpg)
 ![fondocontroles](https://user-images.githubusercontent.com/103133929/178805264-9d0050cd-3b99-41bf-92b6-44717f8a467c.jpg)
 ![fondocreditos](https://user-images.githubusercontent.com/103133929/178805281-eebad017-b5cf-46da-b90e-59a9764c85ea.png)
-![juego](https://user-images.githubusercontent.com/103133929/178805489-191b9d6a-6ccf-4aef-b6ba-ad9bef320d78.jpg)
-![juego2](https://user-images.githubusercontent.com/103133929/178805899-2f9b5c32-89bb-41a4-b023-ea827b540774.jpg)
+![juego1](https://user-images.githubusercontent.com/102833227/179128124-bb4781fc-6c50-47b9-9a07-a6b78393a2a0.png)
+![juego2](https://user-images.githubusercontent.com/102833227/179128135-07e38981-e720-4ae1-a009-e926979ed850.png)
+
 
 ## Reglas de Juego / Instrucciones
 
